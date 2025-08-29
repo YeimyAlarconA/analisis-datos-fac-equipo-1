@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 SEPARADOR = "=" * 100
 
 # Leer los datos
-df = pd.read_excel('C:/Users/Yeimy/Documents/Python/analisis-datos-fac-equipo-1/analisis-datos-fac-equipo-YLM/Datos/JEFAB_2024.xlsx')
+df = pd.read_excel('C:\\Users\\linar\\OneDrive\\Escritorio\\Python\\analisis-datos-fac-equipo-1\\analisis-datos-fac-equipo-YLM\\Datos\\JEFAB_2024.xlsx')
 
 # Nombres de las variables
 print("=== NOMBRES DE LAS VARIABLES ===")
@@ -171,7 +171,7 @@ print(SEPARADOR)
 #Luego de tener el dataset depurado y limpio sin faltantes, extraemos variables a trabajar
 print("=== EXTRAEMOS UNICAMENTE LAS VARIABLES A TRABAJAR ===")
 deseadas = [
-    "EDAD2","SEXO","NIVEL EDUCATIVO","ESTRATO","CATEGORIA","ESTADO_CIVIL",
+    "EDAD2","SEXO","NIVEL EDUCATIVO","ESTRATO","CATEGORIA","GRADO","ESTADO_CIVIL",
     "HIJOS","HABITA_VIVIENDA_FAMILIAR","RELACION_AMBOS_PADRES","RELACION_HERMANOS",
     "TIPO_RELACION_PAREJA","NUMERO_HIJOS","RELACION_HIJOS",
     "RESPONSABILIDAD_ACADEMICA_BIENESTAR_HIJOS","PERS_A_CARG_HIJOS",
@@ -201,7 +201,7 @@ missing_info = pd.DataFrame({
 'Datos_Faltantes': missing_data.values,
 'Porcentaje': missing_percent.values
 }).sort_values('Datos_Faltantes', ascending=False)
-print(missing_info.head(18))
+print(missing_info.head(19))
 
 print(SEPARADOR)
 
