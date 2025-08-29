@@ -147,4 +147,34 @@ En casos de **conflicto o relaciones deterioradas**, predomina claramente la **n
 <img width="776" height="437" alt="image" src="https://github.com/user-attachments/assets/b86fa764-a229-463d-9ae1-2f754da30bf3" />
 
 
+## 🔹 Pregunta 4 Relación con hijos vs responsabilidad académica
 
+✅ Hallazgo central
+La calidad de la relación con los hijos se refleja directamente en el compromiso académico:
+-	Relación positiva → mayor corresponsabilidad (ambos padres).
+-	Relación conflictiva o distante → se delega principalmente en la madre o terceros.
+-	La figura paterna tiende a desaparecer del rol educativo cuando la relación con los hijos se debilita.
+
+<img width="999" height="556" alt="image" src="https://github.com/user-attachments/assets/724d3e00-5d51-41ea-8424-e92c249330ce" />
+
+
+## 🔹 Pregunta 5 Convivencia vs relación entre ambos padres
+
+✅ Hallazgo central
+La gráfica revela que:
+-	La convivencia en la vivienda familiar es baja en todos los casos, predominando el “No”.
+-	Cuando la relación entre padres es cercana, hay más probabilidades de que los hijos sigan habitando con ellos.
+-	En cambio, las relaciones distantes o conflictivas tienden a coincidir con ruptura de la convivencia familiar.
+
+<img width="898" height="476" alt="image" src="https://github.com/user-attachments/assets/7d6a1b9b-34e2-474c-93a9-2d8dd06f3d26" />
+
+
+## 🔹 Pregunta 6	Número de hijos por rango de edad
+
+✅ Hallazgo central
+La gráfica evidencia una curva creciente:
+-	A menor edad, menos hijos.
+-	A medida que aumenta la edad, el número promedio de hijos también crece, alcanzando su punto más alto en la población mayor a 55 años.
+Esto es consistente con la idea de que la formación y consolidación familiar ocurre de manera progresiva a lo largo del ciclo de vida.
+
+<img width="781" height="416" alt="image" src="https://github.com/user-attachments/assets/b0293759-4c22-4155-a5d2-df03502eff76" />
