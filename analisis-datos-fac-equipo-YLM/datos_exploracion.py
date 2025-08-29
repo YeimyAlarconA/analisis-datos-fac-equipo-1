@@ -1,4 +1,4 @@
-    # calidad_datos.py
+
 import pandas as pd, unicodedata, re
 import numpy as np
 import plotly.graph_objects as go
@@ -9,7 +9,8 @@ import seaborn as sns
 SEPARADOR = "=" * 100
 
 # Leer los datos
-df = pd.read_excel('C:/Users/Yeimy/Documents/Python/analisis-datos-fac-equipo-1/analisis-datos-fac-equipo-YLM/Datos/JEFAB_2024.xlsx')
+df = pd.read_excel('C:/Users/linar/OneDrive/Escritorio/Python/analisis-datos-fac-equipo-1/analisis-datos-fac-equipo-YLM/Datos/JEFAB_2024.xlsx')
+print(df)
 
 # Nombres de las variables
 print("=== NOMBRES DE LAS VARIABLES ===")
