@@ -38,23 +38,24 @@ Completitud: porcentaje y patrón de NA por variable/subgrupo; mapa de faltantes
 
 Del conjunto original se seleccionaron únicamente 18 columnas para el análisis.
 
-- `EDAD` : años cumplidos.
-- `SEXO`: categoría biográfica reportada.
-- `NIVEL_EDUCATIVO`: máximo nivel alcanzado.
-- `ESTRATO`: estrato socioeconómico (si aplica).
-- `CATEGORIA`: categoría laboral/administrativa en la FAC.
+- `EDAD` : Años cumplidos.
+- `SEXO`: Categoría biográfica reportada.
+- `NIVEL_EDUCATIVO`: Máximo nivel alcanzado.
+- `ESTRATO`: Estrato socioeconómico (si aplica).
+- `CATEGORIA`: Categoría laboral/administrativa en la FAC.
+- `CATEGORIA`: Rango jerárquico de la persona en la FAC a la fecha de la encuesta.
 - `ESTADO_CIVIL`: estado civil actual.
 - `HIJOS`: indica si tiene hijos.
-- `HABITA_VIVIENDA`: tenencia/condición de vivienda.
-- `RELACION_AMBOS_PADRES`: calidad de relación con ambos padres.
-- `RELACION_HERMANOS`: calidad de relación con hermanos.
-- `TIPO_RELACION_PAREJA`: situación de pareja.
-- `NUMERO_HIJOS`: total de hijos que tiene.
-- `RELACION_HIJO`: calidad de relación con los hijos.
-- `RESPONSABILIDAD_ACADEMICA_BIENESTAR_HIJOS`: quién asume la responsabilidad académica y de bienestar de los hijos.
-- `PERSONAS_A_CARGO_HIJOS`: nº de personas responsables de los hijos.
-- `HIJOS_EN_HOGAR`: nº de hijos que conviven en el hogar.
-- `HERMANOS`: nº total de hermanos.
+- `HABITA_VIVIENDA`: Tenencia/condición de vivienda.
+- `RELACION_AMBOS_PADRES`: Calidad de relación con ambos padres.
+- `RELACION_HERMANOS`: Calidad de relación con hermanos.
+- `TIPO_RELACION_PAREJA`: Situación de pareja.
+- `NUMERO_HIJOS`: Total de hijos que tiene.
+- `RELACION_HIJO`: Calidad de relación con los hijos.
+- `RESPONSABILIDAD_ACADEMICA_BIENESTAR_HIJOS`: Quién asume la responsabilidad académica y de bienestar de los hijos.
+- `PERSONAS_A_CARGO_HIJOS`: Nº de personas responsables de los hijos.
+- `HIJOS_EN_HOGAR`: Nº de hijos que conviven en el hogar.
+- `HERMANOS`: Nº total de hermanos.
 
 ## Requisitos Técnicos
 - **Python** ≥ 3.10 
