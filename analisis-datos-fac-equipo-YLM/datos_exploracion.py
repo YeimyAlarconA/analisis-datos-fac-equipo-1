@@ -445,3 +445,126 @@ plt.legend(title='Estrato', bbox_to_anchor=(1.02, 1), loc='upper left')
 plt.tight_layout()
 plt.show()
 
+# ANALISIS FAMILIAR
+# analisis_familiar.py
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Análisis de estado civil
+print("=== ANÁLISIS ESTADO CIVIL ===")
+print(df['ESTADO_CIVIL'].value_counts())
+
+# Análisis de hijos
+print("\n=== ANÁLISIS DE HIJOS ===")
+print(f"Personal con hijos: {df['HIJOS'].value_counts()}")
+
+# Análisis de convivencia familiar
+print("\n=== ANÁLISIS DE CONVIVENCIA ===")
+print(f"Habita con familia: {df['HABITA_VIVIENDA_FAMILIAR'].value_counts()}")
+
+plt.figure(figsize=(10, 6))
+df['ESTADO_CIVIL'].value_counts().plot(kind='bar', color="#836FFF")
+plt.title('Distribución del Estado Civil')
+plt.xlabel('Estado Civil')
+plt.ylabel('Cantidad')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+### Relacion con hijos vs responsabilidad academica
+df["RELACION_HIJOS"] = df["RELACION_HIJOS"].astype(str).str.upper().str.strip()
+df["RESPONSABILIDAD_ACADEMICA_BIENESTAR_HIJOS"] = df["RESPONSABILIDAD_ACADEMICA_BIENESTAR_HIJOS"].astype(str).str.upper().str.strip()
+
+# Tabla %
+tab_q3 = pd.crosstab(
+    df["RELACION_HIJOS"].fillna("NO RESPUESTA"),
+    df["RESPONSABILIDAD_ACADEMICA_BIENESTAR_HIJOS"].fillna("NO RESPUESTA"),
+    normalize="index"
+) * 100
+print(tab_q3.round(1))
+
+# Seleccionar top 5 relaciones con hijos
+top_relh = df["RELACION_HIJOS"].value_counts().nlargest(5).index.tolist()
+plot_tab = pd.crosstab(
+    df.loc[df["RELACION_HIJOS"].isin(top_relh), "RELACION_HIJOS"],
+    df.loc[df["RELACION_HIJOS"].isin(top_relh), "RESPONSABILIDAD_ACADEMICA_BIENESTAR_HIJOS"],
+    normalize="index"
+) * 100
+
+# Gráfico apilado %
+plt.figure(figsize=(9,5))
+
+# Colores definidos
+colors = ["#FFBBFF", "#7FFFD4", "#CAFF70", "#FFF68F", "#FFA07A", "#EED2EE"]
+
+bottom = np.zeros(len(plot_tab))
+x = np.arange(len(plot_tab.index))
+
+for i, col in enumerate(plot_tab.columns):
+    plt.bar(
+        x,
+        plot_tab[col].values,
+        bottom=bottom,
+        label=str(col),
+        color=colors[i % len(colors)]  # recorre los colores de la lista
+    )
+    bottom += plot_tab[col].values
+
+plt.title("Responsabilidad académica por relación con hijos (%) - Top 5")
+plt.xlabel("Relación con hijos")
+plt.ylabel("Porcentaje dentro de la relación")
+plt.xticks(x, plot_tab.index.astype(str), rotation=45)
+plt.legend(bbox_to_anchor=(1.02,1), loc="upper left")
+plt.tight_layout()
+plt.show()
+
+
+###Convivencia vs relación entre ambos padres
+df["RELACION_AMBOS PADRES"] = df["RELACION_AMBOS PADRES"].astype(str).str.upper().str.strip()
+
+tab_q4 = pd.crosstab(
+    df["RELACION_AMBOS PADRES"].fillna("NO RESPUESTA"),
+    df["HABITA_VIVIENDA_FAMILIAR"].fillna("NO RESPUESTA"),
+    normalize="index"
+) * 100
+print(tab_q4.round(1))
+
+# Gráfic
+colors = ["#A2CD5A", "#87CEFA"]  
+
+tab_q4.plot(
+    kind="bar",
+    figsize=(10,5),
+    color=colors
+)
+
+plt.title("Habita vivienda familiar por relación entre ambos padres (%)")
+plt.xlabel("Relación entre ambos padres")
+plt.ylabel("Porcentaje dentro del nivel de relación")
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+
+###Número de hijos por rango de edad
+df["EDAD2"] = pd.to_numeric(df["EDAD2"], errors="coerce")
+
+bins = [0,24,34,44,54,200]
+labels = ["<=24","25-34","35-44","45-54","55+"]
+df["GRUPO_EDAD"] = pd.cut(df["EDAD2"], bins=bins, labels=labels, include_lowest=True)
+
+resumen_q5 = df.groupby("GRUPO_EDAD")["NUMERO_HIJOS"].agg(["count","mean","median"])
+print(resumen_q5.round(2))
+
+# Gráfico con color personalizado
+plt.figure(figsize=(7,4))
+resumen_q5["mean"].plot(
+    kind="bar",
+    color="#79CDCD"   # Color aplicado
+)
+plt.title("Promedio # hijos por grupo de edad")
+plt.xlabel("Grupo de edad")
+plt.ylabel("Promedio # hijos")
+plt.xticks(rotation=0)
+plt.tight_layout()
+plt.show()
