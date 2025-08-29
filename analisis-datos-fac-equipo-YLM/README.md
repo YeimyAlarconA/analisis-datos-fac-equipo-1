@@ -1,4 +1,4 @@
-# Proyecto FAC — Análisis Básico de Encuesta de Bienestar Familiar
+# Proyecto FAC — Análisis Básico de Encuesta de Bienestar Familiar De la Fuerza Aerea Colombiana (FAC)
 
 > **Estado:** En progreso · **Repositorio:** _[Link Repositorio](https://github.com/YeimyAlarconA/analisis-datos-fac-equipo-1.git)_ · **Última actualización:** 2025-08-29
 
@@ -12,26 +12,11 @@ Trabajar en equipo usando **Git/GitHub** y **Visual Studio Code (VS Code)** para
 
 > Cada rol tiene responsabilidades principales (abajo) y tareas de apoyo cruzadas para revisión por pares.
 
-## Estructura del Repositorio
-
-fac-encuesta/
-├─ data/
-│ ├─ raw/ # Archivos originales (solo lectura)
-│ ├─ interim/ # Archivos intermedios (transformaciones puntuales)
-│ └─ processed/ # Tablas finales para análisis y visualización
-├─ notebooks/ # Análisis exploratorio (EDA) y visualizaciones
-├─ src/ # Funciones reutilizables (carga, validaciones, utils)
-├─ reports/ # Resultados (tablas, gráficos) y entregables
-├─ docs/ # Documentación adicional (glosario, anexos)
-├─ figures/ # Imágenes exportadas
-├─ tests/ # Pruebas (si aplica)
-└─ README.md # Este documento
-
 ## Alcance Analítico 
 ### A. Demografía (Líder: Yeimy Alarcon)
 Define el alcance demográfico y las variables foco (EDAD, SEXO, NIVEL_EDUCATIVO, ESTRATO, CATEGORIA).
 
-Ejecuta los cruces mínimos: NIVEL_EDUCATIVO × SEXO, EDAD × NIVEL_EDUCATIVO y NIVEL_EDUCATIVO × ESTRATO, con indicadores descriptivos y visualizaciones sintéticas.
+Ejecuta los cruces : NIVEL_EDUCATIVO × SEXO, EDAD × NIVEL_EDUCATIVO y NIVEL_EDUCATIVO × ESTRATO, con indicadores descriptivos y visualizaciones sintéticas.
 
 Entrega tablas y 3–5 gráficos con interpretaciones breves y coordina criterios de corte y segmentación con los roles B y C.
 
