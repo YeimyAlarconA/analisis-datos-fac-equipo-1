@@ -1,18 +1,18 @@
 
-# Resultados del análisis — Proyecto FAC
+# 📊 Resultados del análisis — Proyecto FAC
 
 Aquí documentamos los análisis de nuestro proyecto (A: Demografía · B: Datos familiares · C: Calidad de datos).
 
 ---
 
-## Calidad de Datos
+## 🧹 Calidad de Datos
 
 Aseguramos que el dataset sea **consistente, completo y estandarizado**.  
 Partimos de **<6423>** registros y **<231>** variables; para el análisis usamos **18 columnas** (≈ **<8>%**), todas documentadas en el **diccionario**.
 
 ---
 
-## Procedimiento
+## ⚙️ Procedimiento
 
 **Diagnóstico inicial**
 - Cuantificación de faltantes por variable y verificación de duplicados.
@@ -38,7 +38,7 @@ Partimos de **<6423>** registros y **<231>** variables; para el análisis usamos
 
 ---
 
-## Resultados
+## ✅ Resultados
 
 - **Comparabilidad**: categorías unificadas permiten cruces limpios (p. ej., `NIVEL_EDUCATIVO × SEXO/ESTRATO`). 
 
@@ -57,7 +57,7 @@ Como analista demográfica del equipo, se realizó un análisis de los datos pro
 
 La base de datos fue depurada previamente por el experto en calidad de datos, quedando conformada por 6423 registros y 18 variables listas para su análisis.
 
-# 👤 Análisis de Edad
+## 👤 Análisis de Edad
 
 - Edad mínima: 18 años
 - Edad promedio: 36.7 años
@@ -66,7 +66,7 @@ La base de datos fue depurada previamente por el experto en calidad de datos, qu
 El rango de edad más común fue 33–37 años (1267 personas), seguido de 28–32 años (1211 personas).
 Esto indica que gran parte del personal de la FAC encuestado se encuentra en edades de madurez profesional, lo que influye en su desarrollo laboral y familiar.
 
-# 🚹🚺 Distribución por Sexo
+## 🚹🚺 Distribución por Sexo
 
 - Hombres: 4470 (69.6%)
 - Mujeres: 1953 (30.4%)
@@ -75,7 +75,7 @@ Existe una clara predominancia masculina, coherente con el contexto militar.
 Sin embargo, la participación femenina es significativa, representando casi un tercio de la muestra, lo que refleja avances en inclusión y diversidad dentro de la institución.
 Sí existen diferencias en la distribución por género: los hombres son mayoría, pero las mujeres tienen una presencia importante.
 
-# 🎖️ Categoría Militar
+## 🎖️ Categoría Militar
 
 El análisis de la categoría militar muestra que:
 - Suboficiales: 2650 personas (grupo más frecuente)
@@ -84,11 +84,11 @@ El análisis de la categoría militar muestra que:
   
 Los suboficiales concentran la mayor parte de la muestra, por lo que las estrategias de bienestar deben priorizar a este grupo.
 
-# 🎓 Análisis Nivel Educativo y Sexo
+## 🎓 Análisis Nivel Educativo y Sexo
 
 ![Imagen de WhatsApp 2025-08-29 a las 14 10 04_37d2e8ce](https://github.com/user-attachments/assets/9150b10d-1dad-4b74-b48b-bbafa71fde80)
 
-# 📈 Análisis Edad y Nivel Educativo
+## 📈 Análisis Edad y Nivel Educativo
 
 ![Imagen de WhatsApp 2025-08-29 a las 16 11 58_d2409536](https://github.com/user-attachments/assets/3c8aef27-48fa-41c6-b59b-f0775f128133)
 
