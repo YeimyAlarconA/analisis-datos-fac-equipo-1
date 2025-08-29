@@ -3,11 +3,12 @@ import pandas as pd, unicodedata, re
 import numpy as np
 import plotly.graph_objects as go
 import plotly.io as pio
+import matplotlib.pyplot as plt
 
 SEPARADOR = "=" * 100
 
 # Leer los datos
-df = pd.read_excel('C:/Users/linar/OneDrive/Escritorio/Python/analisis-datos-fac-equipo-1/analisis-datos-fac-equipo-YLM/Datos/JEFAB_2024.xlsx')
+df = pd.read_excel('C:/Users/Yeimy/Documents/Python/analisis-datos-fac-equipo-1/analisis-datos-fac-equipo-YLM/Datos/JEFAB_2024.xlsx')
 
 # Nombres de las variables
 print("=== NOMBRES DE LAS VARIABLES ===")
@@ -203,4 +204,28 @@ missing_info = pd.DataFrame({
 print(missing_info.head(18))
 
 print(SEPARADOR)
+
+#=================================================================================================================================================================
+#ANÁLISIS DEMOGRAFICO
+#=================================================================================================================================================================
+
+# Explorar estructura básica
+print("=== INFORMACIÓN GENERAL ===")
+print(f"Total de registros: {len(df)}")
+print(f"Total de columnas: {len(df.columns)}")
+
+# Análisis de edad
+print("\n=== ANÁLISIS DE EDAD ===")
+print(f"Edad promedio: {df['EDAD2'].mean():.1f} años")
+print(f"Edad mínima: {df['EDAD2'].min()} años")
+print(f"Edad máxima: {df['EDAD2'].max()} años")
+
+# Gráfico de edades
+plt.figure(figsize=(10, 6))
+plt.hist(df['EDAD2'], bins=20, edgecolor='black')
+plt.title('Distribución de Edades del Personal FAC')
+plt.xlabel('Edad')
+plt.ylabel('Cantidad de Personal')
+plt.show()
+
 
