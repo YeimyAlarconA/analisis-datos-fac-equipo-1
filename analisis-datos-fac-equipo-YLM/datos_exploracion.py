@@ -4,11 +4,12 @@ import numpy as np
 import plotly.graph_objects as go
 import plotly.io as pio
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 SEPARADOR = "=" * 100
 
 # Leer los datos
-df = pd.read_excel('C:\\Users\\linar\\OneDrive\\Escritorio\\Python\\analisis-datos-fac-equipo-1\\analisis-datos-fac-equipo-YLM\\Datos\\JEFAB_2024.xlsx')
+df = pd.read_excel('C:/Users/Yeimy/Documents/Python/analisis-datos-fac-equipo-1/analisis-datos-fac-equipo-YLM/Datos/JEFAB_2024.xlsx')
 
 # Nombres de las variables
 print("=== NOMBRES DE LAS VARIABLES ===")
@@ -266,13 +267,13 @@ plt.xticks(rotation=0)
 plt.show()
 
 
-# Análisis de género
-print("\n=== ANÁLISIS DE GÉNERO ===")
-print(df['SEXO'].value_counts())
-
 #=================================================================================================================================================================
 # PREGUNTA 2: ¿Hay diferencias en la distribución por sexo?
 #=================================================================================================================================================================
+
+# Análisis de género
+print("\n=== ANÁLISIS DE GÉNERO ===")
+print(df['SEXO'].value_counts())
 
 # Cuento cuántas personas hay en cada categoría de género
 conteo_genero = df['SEXO'].value_counts()
@@ -291,10 +292,7 @@ cantidad_mas_comun = conteo_genero.max()
 
 print(f"\nEl sexo más común es: '{sexo_mas_comun}' con {cantidad_mas_comun} personas.")
 
-# ===============================
 # VISUALIZACIÓN
-# ===============================
-
 # Hago un gráfico de barras para visualizar la diferencia entre sexos
 colores = ['skyblue', 'lightpink']  # defino los colores para representar las variables(hombre y mujer)
 ax = conteo_genero.plot(kind='bar', color=colores, edgecolor='black')# Creo el gráfico de barras
@@ -320,7 +318,7 @@ conteo_genero.plot(
     kind='pie',
     autopct='%1.1f%%',   # Muestra el porcentaje con un decimal
     startangle=90,       # Gira el inicio para que quede más ordenado
-    colors=['steelblue', '#FF7FAF'],  # Colores para cada sexo
+    colors=['skyblue', 'lightpink'],  # Colores para cada sexo
     wedgeprops={'edgecolor': 'black'}    # Bordes en negro para mejor visualización
 )
 plt.title('Distribución por Sexo - Personal FAC')
@@ -334,4 +332,119 @@ plt.legend(
 
 plt.show()
 
+#=================================================================================================================================================================
+# PREGUNTA 3: ¿Cuál es el grado militar más frecuente?
+#=================================================================================================================================================================
+
+# Conteo de categorías
+vc_cat = df["CATEGORIA"].value_counts()
+
+print("Categoría más frecuente:", vc_cat.idxmax(), "| conteo =", int(vc_cat.max())) # Para mostrar la categoría más frecuente
+
+# Se crea una visualización donde se observa cuál es la categoría más frecuente
+fig, ax = plt.subplots(figsize=(8,5))
+
+# Usamos un colormap para asignar un color diferente a cada barra
+colors = plt.cm.tab10.colors
+bars = ax.barh(
+    vc_cat.head(10).sort_values().index, 
+    vc_cat.head(10).sort_values().values, 
+    color=colors[:len(vc_cat.head(10))],
+    height=0.5
+)
+
+# Título y ejes
+ax.set_title("Top categorías militares por frecuencia")
+ax.set_xlabel("Número de personas")
+ax.set_ylabel("Categoría")
+
+# (4) Añadir etiquetas con el conteo al final de cada barra
+for bar in bars:
+    width = bar.get_width()
+    y = bar.get_y() + bar.get_height() / 2
+    ax.text(
+        width + 1, y,              # posición: un poco a la derecha de la barra
+        str(int(width)),           # texto: el conteo
+        va="center", ha="left",    # alineación
+        color="black", fontsize=10, fontweight="bold"
+    )
+
+plt.tight_layout()
+plt.show()
+
+# ANÁLISIS NIVEL EDUCATIVO Y SEXO
+# Tabla cruzada porcentual
+tab_sexo_nivel = pd.crosstab(df['SEXO'], df['NIVEL_EDUCATIVO'], normalize='index') * 100
+
+sexos = tab_sexo_nivel.index
+niveles = tab_sexo_nivel.columns
+
+# Colores (uno distinto por cada nivel educativo)
+colors = plt.cm.Set2.colors[:len(niveles)]
+
+fig, axes = plt.subplots(1, 2, figsize=(10, 5), dpi=100)
+
+for ax, sexo in zip(axes, sexos):
+    data = tab_sexo_nivel.loc[sexo]
+    wedges, texts, autotexts = ax.pie(
+        data, labels=None, autopct="%.1f%%", startangle=90, counterclock=False,
+        colors=colors, wedgeprops=dict(width=0.4)
+    )
+    # Aumentar tamaño de porcentajes
+    for t in autotexts:
+        t.set_fontsize(11)   # 🔹 aquí ajustas el tamaño (antes era ~8-9)
+    ax.set_title(sexo, fontsize=12)
+
+# Leyenda única (niveles educativos)
+fig.legend(niveles, loc="lower center", ncol=3, title="Nivel Educativo", frameon=False)
+
+plt.tight_layout(rect=[0, 0.07, 1, 0.95])
+plt.show()
+
+# ANÁLISIS EDAD Y NIVEL EDUCATIVO
+print("\n=== EDAD por NIVEL EDUCATIVO (count/mean/median) ===")
+print(df.groupby('NIVEL_EDUCATIVO')['EDAD2'].agg(['count','mean','median']).round(1))
+
+# === Gráfica 1: Boxplot de edad por nivel educativo ===
+plt.figure(figsize=(10,5))
+grupos_ne = [g.dropna().values for _, g in df.groupby('NIVEL_EDUCATIVO')['EDAD2']]
+labels_ne = list(df['NIVEL_EDUCATIVO'].dropna().astype(str).unique())
+plt.boxplot(grupos_ne, labels=labels_ne, showfliers=False)
+plt.title('Edad por Nivel Educativo (Boxplot)')
+plt.xlabel('Nivel educativo')
+plt.ylabel('Edad')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+# === Gráfica 2: Líneas de distribución de edades por nivel educativo ===
+plt.figure(figsize=(10,6))
+for nivel, grupo in df.groupby('NIVEL_EDUCATIVO'):
+    counts = grupo['EDAD2'].value_counts().sort_index()
+    plt.plot(counts.index, counts.values, marker='o', label=nivel)
+
+plt.title("Distribución de Edad por Nivel Educativo (Líneas)")
+plt.xlabel("Edad")
+plt.ylabel("Número de personas")
+plt.legend(title="Nivel educativo")
+plt.grid(True, linestyle="--", alpha=0.5)
+plt.tight_layout()
+plt.show()
+
+###
+
+print("\n=== NIVEL EDUCATIVO x ESTRATO (porcentajes dentro de nivel) ===")
+tab_ne_es = pd.crosstab(df['NIVEL_EDUCATIVO'], df['ESTRATO'], normalize='index') * 100
+print(tab_ne_es.round(1))
+
+# Gráfica: barras apiladas (% dentro de cada nivel educativo)
+plt.figure(figsize=(10,5))
+ax = tab_ne_es.plot(kind='bar', stacked=True, figsize=(10,5))
+
+plt.title('Estrato por Nivel Educativo (% dentro de nivel)')
+plt.xlabel('Nivel educativo')
+plt.ylabel('Porcentaje')
+plt.legend(title='Estrato', bbox_to_anchor=(1.02, 1), loc='upper left')
+plt.tight_layout()
+plt.show()
 
