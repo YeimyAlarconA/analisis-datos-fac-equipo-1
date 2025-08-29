@@ -51,7 +51,7 @@ Partimos de **<6423>** registros y **<231>** variables; para el análisis usamos
 - **Catálogos** alineados con el **diccionario** del proyecto.
 
 ---
-# 📊 Informe de Análisis Demográfico – Proyecto FAC Bienestar Familiar
+# 📊 Informe de Análisis Demográfico
 
 Como analista demográfica del equipo, se realizó un análisis de los datos provenientes de la encuesta de bienestar familiar aplicada al personal de la Fuerza Aérea Colombiana (FAC). El propósito fue caracterizar la población encuestada desde una perspectiva demográfica, explorando variables como edad, género, categoría militar, nivel educativo y estrato socioeconómico.
 
