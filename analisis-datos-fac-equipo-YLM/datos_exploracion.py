@@ -228,4 +228,110 @@ plt.xlabel('Edad')
 plt.ylabel('Cantidad de Personal')
 plt.show()
 
+#=================================================================================================================================================================
+# PREGUNTA 1: ¿Cuál es el rango de edad más común?
+#=================================================================================================================================================================
+
+# Creo los rangos de edad de 5 en 5 años.
+# Uso la función pd.cut para clasificar cada persona dentro de un rango.
+df['RANGO_EDAD'] = pd.cut(
+    df['EDAD2'],
+    bins=[17, 22, 27, 32, 37, 42, 47, 52, 57, 62, 67, 70],  # intervalos de 5 en 5
+    labels=['18-22', '23-27', '28-32', '33-37', '38-42', '43-47', 
+            '48-52', '53-57', '58-62', '63-67', '68-69'],   # nombres de los rangos
+    right=True  # incluyo el valor del límite derecho en cada intervalo
+)
+
+# Cuento cuántas personas hay en cada rango de edad.
+frecuencias_rango = df['RANGO_EDAD'].value_counts().sort_values(ascending=False)
+
+print("=== FRECUENCIA DE RANGOS DE EDAD ===")
+print(frecuencias_rango)
+
+# Identifico el rango más frecuente y el número de personas que están en él.
+rango_mas_comun = frecuencias_rango.idxmax()
+cantidad_mas_comun = frecuencias_rango.max()
+
+print(f"\nEl rango de edad más común es: '{rango_mas_comun}' con {cantidad_mas_comun} personas.")
+
+
+# VISUALIZACIÓN
+# Hago un gráfico de barras para visualizar mejor la distribución por rangos de edad.
+plt.figure(figsize=(10, 6))
+frecuencias_rango.sort_index().plot(kind='bar', color='steelblue', edgecolor='black')
+plt.title('Distribución por Rango de Edad - Personal FAC')
+plt.xlabel('Rango de Edad')
+plt.ylabel('Cantidad de Personas')
+plt.xticks(rotation=0)
+plt.show()
+
+
+# Análisis de género
+print("\n=== ANÁLISIS DE GÉNERO ===")
+print(df['SEXO'].value_counts())
+
+#=================================================================================================================================================================
+# PREGUNTA 2: ¿Hay diferencias en la distribución por sexo?
+#=================================================================================================================================================================
+
+# Cuento cuántas personas hay en cada categoría de género
+conteo_genero = df['SEXO'].value_counts()
+
+print("=== DISTRIBUCIÓN POR SEXO ===")
+print(conteo_genero)
+
+# También calculo los porcentajes para ver mejor la proporción
+porcentajes_genero = df['SEXO'].value_counts(normalize=True) * 100
+print("\n=== PORCENTAJES POR SEXO ===")
+print(porcentajes_genero.round(1))
+
+# Identifico cuál es el sexo más frecuente
+sexo_mas_comun = conteo_genero.idxmax()
+cantidad_mas_comun = conteo_genero.max()
+
+print(f"\nEl sexo más común es: '{sexo_mas_comun}' con {cantidad_mas_comun} personas.")
+
+# ===============================
+# VISUALIZACIÓN
+# ===============================
+
+# Hago un gráfico de barras para visualizar la diferencia entre sexos
+colores = ['skyblue', 'lightpink']  # defino los colores para representar las variables(hombre y mujer)
+ax = conteo_genero.plot(kind='bar', color=colores, edgecolor='black')# Creo el gráfico de barras
+
+# Agrego título y etiquetas
+plt.title('Distribución por Sexo - Personal FAC')
+plt.xlabel('Sexo')
+plt.ylabel('Cantidad de Personas')
+plt.xticks(rotation=0)
+
+# Agrego los valores correspondientes a la cantidad de personas por sexo encima de cada barra
+for p in ax.patches:
+    ax.annotate(str(p.get_height()), 
+                (p.get_x() + p.get_width() / 2., p.get_height()), 
+                ha='center', va='bottom')
+
+plt.legend(conteo_genero.index, title="Sexo", loc="lower left")# Agrego leyenda al gráfico
+plt.show()
+
+# Hago un gráfico de torta (pie chart) mostrando los porcentajes
+plt.figure(figsize=(6, 6))
+conteo_genero.plot(
+    kind='pie',
+    autopct='%1.1f%%',   # Muestra el porcentaje con un decimal
+    startangle=90,       # Gira el inicio para que quede más ordenado
+    colors=['steelblue', '#FF7FAF'],  # Colores para cada sexo
+    wedgeprops={'edgecolor': 'black'}    # Bordes en negro para mejor visualización
+)
+plt.title('Distribución por Sexo - Personal FAC')
+plt.ylabel('')  # Quito la etiqueta del eje Y porque no se necesita en pie chart
+# Agrego la leyenda
+plt.legend(
+    labels=conteo_genero.index,  # Los nombres de las categorías (Hombre, Mujer.)
+    title="Sexo",                # Título de la leyenda
+    loc="lower left"            
+)
+
+plt.show()
+
 
