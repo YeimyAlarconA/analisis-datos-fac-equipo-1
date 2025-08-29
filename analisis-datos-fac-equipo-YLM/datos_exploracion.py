@@ -154,7 +154,5 @@ print(missing_info[ missing_info['Columna'] == 'EDAD2' ])
 
 
 
-# ===== GUARDAR (hazlo solo cuando verifiques que todo quedó bien) =====
-# df.to_excel('C:/Users/linar/OneDrive/Escritorio/Python/analisis-datos-fac-equipo-1/analisis_datos_fac.xlsx', index=False)
-# print('Archivo guardado')
+
 
