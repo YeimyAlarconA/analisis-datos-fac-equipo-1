@@ -51,7 +51,7 @@ Partimos de **<6423>** registros y **<231>** variables; para el análisis usamos
 - **Catálogos** alineados con el **diccionario** del proyecto.
 
 ---
-📊 Informe de Análisis Demográfico – Proyecto FAC Bienestar Familiar
+# 📊 Informe de Análisis Demográfico – Proyecto FAC Bienestar Familiar
 
 Como analista demográfica del equipo, se realizó un análisis de los datos provenientes de la encuesta de bienestar familiar aplicada al personal de la Fuerza Aérea Colombiana (FAC). El propósito fue caracterizar la población encuestada desde una perspectiva demográfica, explorando variables como edad, género, categoría militar, nivel educativo y estrato socioeconómico.
 
@@ -59,16 +59,18 @@ La base de datos fue depurada previamente por el experto en calidad de datos, qu
 
 # 👤 Análisis de Edad
 
-Edad mínima: 18 años
-Edad promedio: 36.7 años
-Edad máxima: 69 años
+- Edad mínima: 18 años
+- Edad promedio: 36.7 años
+- Edad máxima: 69 años
+  
 El rango de edad más común fue 33–37 años (1267 personas), seguido de 28–32 años (1211 personas).
 Esto indica que gran parte del personal de la FAC encuestado se encuentra en edades de madurez profesional, lo que influye en su desarrollo laboral y familiar.
 
 # 🚹🚺 Distribución por Sexo
 
-Hombres: 4470 (69.6%)
-Mujeres: 1953 (30.4%)
+- Hombres: 4470 (69.6%)
+- Mujeres: 1953 (30.4%)
+  
 Existe una clara predominancia masculina, coherente con el contexto militar.
 Sin embargo, la participación femenina es significativa, representando casi un tercio de la muestra, lo que refleja avances en inclusión y diversidad dentro de la institución.
 Sí existen diferencias en la distribución por género: los hombres son mayoría, pero las mujeres tienen una presencia importante.
@@ -76,9 +78,10 @@ Sí existen diferencias en la distribución por género: los hombres son mayorí
 # 🎖️ Categoría Militar
 
 El análisis de la categoría militar muestra que:
-Suboficiales: 2650 personas (grupo más frecuente)
-Civiles: segundo lugar
-Oficiales: menor proporción
+- Suboficiales: 2650 personas (grupo más frecuente)
+- Civiles: segundo lugar
+- Oficiales: menor proporción
+  
 Los suboficiales concentran la mayor parte de la muestra, por lo que las estrategias de bienestar deben priorizar a este grupo.
 
 # 🎓 Análisis Nivel Educativo y Sexo
