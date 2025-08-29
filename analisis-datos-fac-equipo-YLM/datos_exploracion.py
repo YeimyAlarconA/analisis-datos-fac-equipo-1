@@ -402,36 +402,32 @@ plt.tight_layout(rect=[0, 0.07, 1, 0.95])
 plt.show()
 
 # ANÁLISIS EDAD Y NIVEL EDUCATIVO
+# === Estadísticas descriptivas: Edad por Nivel Educativo ===
 print("\n=== EDAD por NIVEL EDUCATIVO (count/mean/median) ===")
 print(df.groupby('NIVEL_EDUCATIVO')['EDAD2'].agg(['count','mean','median']).round(1))
 
-# === Gráfica 1: Boxplot de edad por nivel educativo ===
-plt.figure(figsize=(10,5))
-grupos_ne = [g.dropna().values for _, g in df.groupby('NIVEL_EDUCATIVO')['EDAD2']]
-labels_ne = list(df['NIVEL_EDUCATIVO'].dropna().astype(str).unique())
-plt.boxplot(grupos_ne, labels=labels_ne, showfliers=False)
-plt.title('Edad por Nivel Educativo (Boxplot)')
-plt.xlabel('Nivel educativo')
-plt.ylabel('Edad')
+# === Crear rangos de edad (18-69 en intervalos de 5) ===
+bins = list(range(18, 70, 5))
+labels = [f"{i}-{i+4}" for i in bins[:-1]]
+df['RANGO_EDAD'] = pd.cut(df['EDAD2'], bins=bins + [70], labels=labels, right=False)
+
+# === Tabla de frecuencias (porcentajes dentro de nivel educativo) ===
+tab_ne_edad = pd.crosstab(df['NIVEL_EDUCATIVO'], df['RANGO_EDAD'], normalize='index') * 100
+
+print("\n=== Distribución de rangos de edad por nivel educativo (%) ===")
+print(tab_ne_edad.round(1))
+
+# === Gráfico: Barras agrupadas ===
+tab_ne_edad.plot(kind='bar', figsize=(12,6))
+plt.title("Distribución de Edades por Nivel Educativo")
+plt.xlabel("Nivel Educativo")
+plt.ylabel("Porcentaje")
+plt.legend(title="Rango de edad", bbox_to_anchor=(1.02, 1), loc="upper left")
 plt.xticks(rotation=45)
 plt.tight_layout()
 plt.show()
 
-# === Gráfica 2: Líneas de distribución de edades por nivel educativo ===
-plt.figure(figsize=(10,6))
-for nivel, grupo in df.groupby('NIVEL_EDUCATIVO'):
-    counts = grupo['EDAD2'].value_counts().sort_index()
-    plt.plot(counts.index, counts.values, marker='o', label=nivel)
-
-plt.title("Distribución de Edad por Nivel Educativo (Líneas)")
-plt.xlabel("Edad")
-plt.ylabel("Número de personas")
-plt.legend(title="Nivel educativo")
-plt.grid(True, linestyle="--", alpha=0.5)
-plt.tight_layout()
-plt.show()
-
-###
+# ANÁLISIS ESTRATO Y NIVEL EDUCATIVO
 
 print("\n=== NIVEL EDUCATIVO x ESTRATO (porcentajes dentro de nivel) ===")
 tab_ne_es = pd.crosstab(df['NIVEL_EDUCATIVO'], df['ESTRATO'], normalize='index') * 100
