@@ -1,16 +1,14 @@
 # calidad_datos.py
-import pandas as pd
+import display
+import pandas as pd, unicodedata, re
 import numpy as np
-
+import plotly.graph_objects as go
+import plotly.io as pio
 
 SEPARADOR = "=" * 100
+
 # Leer los datos
 df = pd.read_excel('C:/Users/linar/OneDrive/Escritorio/Python/analisis-datos-fac-equipo-1/analisis-datos-fac-equipo-YLM/Datos/JEFAB_2024.xlsx')
-print(df)
-
-
-print(SEPARADOR)
-
 
 # Nombres de las variables
 print("=== NOMBRES DE LAS VARIABLES ===")
@@ -38,12 +36,6 @@ print(f"Registros duplicados: {df.duplicated().sum()}")
 
 print(SEPARADOR)
 
-# Análisis de tipos de datos
-print(f"\n=== TIPOS DE DATOS ===")
-print(df.dtypes.value_counts()) 
-
-print(SEPARADOR)
-
 # Identificar columnas problemáticas
 print(f"\n=== COLUMNAS CON CARACTERES ESPECIALES ===")
 problematic_columns = [col for col in df.columns if 'Ã' in col or 'â' in col]
@@ -53,7 +45,36 @@ for col in problematic_columns[:5]:
 
 print(SEPARADOR)
 
-print(f"\n=== CAMBIOS EN LA VARIABLE NUMERO DE HIJOS ===")
+print("=== DEPURAR COLUMNA DE NIVEL EDUCATIVO ===")
+col = 'NIVEL_EDUCATIVO'
+
+# 1) MAYÚSCULA + sin tildes
+def norm_txt(x):
+    if pd.isna(x): return x
+    t = unicodedata.normalize('NFKD', str(x)).encode('ascii','ignore').decode()
+    return re.sub(r'\s+', ' ', t).upper().strip()
+
+df[col] = df[col].map(norm_txt)
+
+# 2) Unificar typos/variantes
+df[col] = df[col].replace({
+    r'.*(ESPECIALIZA|MAESTR|MAGISTER|DOCTOR|PHD).*'   : 'POSGRADO',
+    r'.*(UNIVERSITAR|PROFESIONA|PREGRADO).*'          : 'PROFESIONAL',
+    r'.*TECNOL.*'                                     : 'TECNOLOGICO',  # TECNOLAGICO, TECNOLOGO, etc.
+    r'.*T[EA]CNI.*'                                   : 'TECNICO',      # TACNICO, TECNICO, etc.
+    r'^BASICA PRIMARIA$'                              : 'PRIMARIA',
+    r'^(BASICA SECUNDARIA|BACHILLER|MEDIA)$'          : 'SECUNDARIA',
+    r'^(N/?A|N A|NA)$'                                : 'NO APLICA',
+    r'^(OTROS?|OTRA)$'                                : 'OTRO',
+}, regex=True)
+
+# Chequeo rápido
+print(sorted(df[col].dropna().unique()))
+print(df[col].value_counts(dropna=False))
+
+print(SEPARADOR)
+
+print(f"\n=== CAMBIOS EN LA VARIABLE NUMERO DE HIJOS Y PONER 0 SI NO TIENEN ===")
 # 1) Asegurar NUMERO_HIJOS como numérico para detectar NaN
 df['NUMERO_HIJOS'] = pd.to_numeric(df['NUMERO_HIJOS'], errors='coerce')
 
@@ -69,7 +90,7 @@ left_norm = (df[left_col].astype(str)
                          .str.replace('N0', 'NO', regex=False))
 
 mask = left_norm.eq('NO') & df['NUMERO_HIJOS'].isna()
-df.loc[mask, 'NUMERO_HIJOS'] = 0  # poner 0 donde a la izquierda dice NO y NUMERO_HIJOS estaba vacío
+df.loc[mask, 'NUMERO_HIJOS'] = 0  
 
 print(f"\n=== VERIFRICACION DE CAMBIOS ===")
 print(f"Columna izquierda detectada: {left_col}")
@@ -78,6 +99,28 @@ print(df['NUMERO_HIJOS'].value_counts(dropna=False).sort_index().head(10))
 print(df.loc[mask, [left_col, 'NUMERO_HIJOS']].head(10))
 
 print(SEPARADOR)
+
+print("=== EXTRAEMOS UNICAMENTE LAS VARIABLES A TRABAJAR ===")
+deseadas = [
+    "EDAD2","SEXO","NIVEL EDUCATIVO","ESTRATO","CATEGORIA","ESTADO_CIVIL",
+    "HIJOS","HABITA_VIVIENDA_FAMILIAR","RELACION_AMBOS_PADRES","RELACION_HERMANOS",
+    "TIPO_RELACION_PAREJA","NUMERO_HIJOS","RELACION_HIJOS",
+    "RESPONSABILIDAD_ACADEMICA_BIENESTAR_HIJOS","PERS_A_CARG_HIJOS",
+    "HIJOS_EN_HOGAR","HERMANOS"
+]
+
+norm = lambda s: re.sub(r'[^a-z0-9]','', unicodedata.normalize('NFKD', str(s)).encode('ascii','ignore').decode().lower())
+map_df = {norm(c): c for c in df.columns}
+sel   = [map_df[norm(w)] for w in deseadas if norm(w) in map_df]
+falt  = [w for w in deseadas if norm(w) not in map_df]
+
+df = df[sel].copy()
+print("Seleccionadas:", sel)
+print("No encontradas:", falt)
+print(df)
+
+print(SEPARADOR)
+
 
 print(f"\n=== IMPUTACION EN NUMERO DE HIJOS ===")
 was_na = df['NUMERO_HIJOS'].isna()
@@ -95,8 +138,6 @@ s_imp = (
 
 
 df['NUMERO_HIJOS'] = s_imp
-df['NUMERO_HIJOS_imputado'] = was_na  # True si se imputó, False si era original
-
 
 print(f"Mediana usada: {fill_val}")
 print(df['NUMERO_HIJOS'].value_counts(dropna=False).sort_index().head(12))
@@ -133,7 +174,6 @@ e_imp = (
 
 
 df['EDAD2'] = e_imp
-df['EDAD2_imputado'] = was_nae  # True si se imputó, False si era original
 
 
 print(f"Mediana usada: {fill_vale}")
@@ -152,7 +192,67 @@ missing_info = pd.DataFrame({
 print("\nFaltantes en EDAD:")
 print(missing_info[ missing_info['Columna'] == 'EDAD2' ])
 
+print(SEPARADOR)
+
+print(f"\n=== IMPUTACION EN HIJOS EN HOGAR ===")
+df['HIJOS_EN_HOGAR'] = pd.to_numeric(df['HIJOS_EN_HOGAR'], errors='coerce')
+was_nae = df['HIJOS_EN_HOGAR'].isna()
 
 
+fill_vale = float(np.nanmedian(df['HIJOS_EN_HOGAR'])) #Con mediana
 
+
+e_imp = (
+    df['HIJOS_EN_HOGAR'].fillna(fill_vale) #Relleno los NA
+     .round()          # p. ej., 1.6 -> 2
+     .clip(lower=0)    # jamás < 0 en un conteo
+     .astype('Int64')  # entero con NA permitido (nullable)
+)
+
+
+df['HIJOS_EN_HOGAR'] = e_imp
+
+
+print(f"Mediana usada: {fill_vale}")
+print(df['HIJOS_EN_HOGAR'].value_counts(dropna=False).sort_index().head(12))
+
+print("=== ANÁLISIS DE DATOS FALTANTES ===")
+missing_data = df.isnull().sum()
+missing_percent = (missing_data / len(df)) * 100
+print("Top 10 columnas con más datos faltantes:")
+missing_info = pd.DataFrame({
+'Columna': missing_data.index,
+'Datos_Faltantes': missing_data.values,
+'Porcentaje': missing_percent.values
+}).sort_values('Datos_Faltantes', ascending=False)
+
+print("\nFaltantes en HIJOS_EN_HOGAR:")
+print(missing_info[ missing_info['Columna'] == 'HIJOS_EN_HOGAR' ])
+
+print(SEPARADOR)
+
+# Análisis de datos faltantes
+print("=== ANÁLISIS DE DATOS FALTANTES ===")
+missing_data = df.isnull().sum()
+missing_percent = (missing_data / len(df)) * 100
+print("Top 10 columnas con más datos faltantes:")
+missing_info = pd.DataFrame({
+'Columna': missing_data.index,
+'Datos_Faltantes': missing_data.values,
+'Porcentaje': missing_percent.values
+}).sort_values('Datos_Faltantes', ascending=False)
+print(missing_info.head(18))
+
+print(SEPARADOR)
+
+print("=== VISTA DE VARIABLES LIMPIAS Y DEPURADAS ===")
+pio.renderers.default = "browser"
+vista = df.head(300)
+
+fig = go.Figure(data=[go.Table(
+    header=dict(values=list(vista.columns), align="left"),
+    cells=dict(values=[vista[c] for c in vista.columns], align="left")
+)])
+fig.update_layout(height=650)
+fig.show()
 
