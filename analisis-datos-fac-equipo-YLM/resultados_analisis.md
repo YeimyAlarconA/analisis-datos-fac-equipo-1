@@ -90,7 +90,7 @@ Los suboficiales concentran la mayor parte de la muestra, por lo que las estrate
 
 # 📈 Análisis Edad y Nivel Educativo
 
-![Imagen de WhatsApp 2025-08-29 a las 14 42 12_f4b19365](https://github.com/user-attachments/assets/9fac220b-8c4d-4a12-b0d7-e82a6ef3795e)
+![Imagen de WhatsApp 2025-08-29 a las 16 11 58_d2409536](https://github.com/user-attachments/assets/3c8aef27-48fa-41c6-b59b-f0775f128133)
 
 # 🏘️ Análisis Estrato Socioeconómico y Nivel Educativo
 
