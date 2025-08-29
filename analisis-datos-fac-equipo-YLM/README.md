@@ -43,7 +43,7 @@ Del conjunto original se seleccionaron únicamente 18 columnas para el análisis
 - `NIVEL_EDUCATIVO`: Máximo nivel alcanzado.
 - `ESTRATO`: Estrato socioeconómico (si aplica).
 - `CATEGORIA`: Categoría laboral/administrativa en la FAC.
-- `CATEGORIA`: Rango jerárquico de la persona en la FAC a la fecha de la encuesta.
+- `GRADO`: Rango jerárquico de la persona en la FAC a la fecha de la encuesta.
 - `ESTADO_CIVIL`: estado civil actual.
 - `HIJOS`: indica si tiene hijos.
 - `HABITA_VIVIENDA`: Tenencia/condición de vivienda.
