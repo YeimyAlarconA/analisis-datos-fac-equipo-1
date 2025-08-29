@@ -1,5 +1,4 @@
-# calidad_datos.py
-import display
+    # calidad_datos.py
 import pandas as pd, unicodedata, re
 import numpy as np
 import plotly.graph_objects as go
@@ -45,10 +44,11 @@ for col in problematic_columns[:5]:
 
 print(SEPARADOR)
 
+
+#Cambiamos sintaxis de la variable nivel educativo
 print("=== DEPURAR COLUMNA DE NIVEL EDUCATIVO ===")
 col = 'NIVEL_EDUCATIVO'
 
-# 1) MAYÚSCULA + sin tildes
 def norm_txt(x):
     if pd.isna(x): return x
     t = unicodedata.normalize('NFKD', str(x)).encode('ascii','ignore').decode()
@@ -60,30 +60,29 @@ df[col] = df[col].map(norm_txt)
 df[col] = df[col].replace({
     r'.*(ESPECIALIZA|MAESTR|MAGISTER|DOCTOR|PHD).*'   : 'POSGRADO',
     r'.*(UNIVERSITAR|PROFESIONA|PREGRADO).*'          : 'PROFESIONAL',
-    r'.*TECNOL.*'                                     : 'TECNOLOGICO',  # TECNOLAGICO, TECNOLOGO, etc.
-    r'.*T[EA]CNI.*'                                   : 'TECNICO',      # TACNICO, TECNICO, etc.
+    r'.*TECNOL.*'                                     : 'TECNOLOGICO',  
+    r'.*T[EA]CNI.*'                                   : 'TECNICO',      
     r'^BASICA PRIMARIA$'                              : 'PRIMARIA',
     r'^(BASICA SECUNDARIA|BACHILLER|MEDIA)$'          : 'SECUNDARIA',
     r'^(N/?A|N A|NA)$'                                : 'NO APLICA',
     r'^(OTROS?|OTRA)$'                                : 'OTRO',
 }, regex=True)
 
-# Chequeo rápido
+
 print(sorted(df[col].dropna().unique()))
 print(df[col].value_counts(dropna=False))
 
 print(SEPARADOR)
 
+#Se pone un 0 si la respuesta a "HIJOS" es NO
 print(f"\n=== CAMBIOS EN LA VARIABLE NUMERO DE HIJOS Y PONER 0 SI NO TIENEN ===")
-# 1) Asegurar NUMERO_HIJOS como numérico para detectar NaN
+
 df['NUMERO_HIJOS'] = pd.to_numeric(df['NUMERO_HIJOS'], errors='coerce')
-
-
 cols = df.columns.tolist()
 idx = cols.index('NUMERO_HIJOS')
-left_col = cols[idx - 1]  # columna de la izquierda
+left_col = cols[idx - 1]  #columna de la izquierda (HIJOS)
 
-# 3) Normalizar texto ('NO', 'no', ' No ', incluso 'N0' con cero) y aplicar regla:
+# Se normaliza el texto ('NO', 'no', ' No ')
 left_norm = (df[left_col].astype(str)
                          .str.strip()
                          .str.upper()
@@ -100,6 +99,75 @@ print(df.loc[mask, [left_col, 'NUMERO_HIJOS']].head(10))
 
 print(SEPARADOR)
 
+#Se Imputan los datos faltantes NUMERO_HIJOS, EDAD2 E HIJOS_EN_HOGAR
+print(f"\n=== IMPUTACION EN NUMERO DE HIJOS ===")
+was_na = df['NUMERO_HIJOS'].isna()
+
+
+fill_val = float(np.nanmedian(df['NUMERO_HIJOS'])) #Con mediana
+
+
+s_imp = (
+    df['NUMERO_HIJOS'].fillna(fill_val) #Relleno los NA
+     .round()          # p. ej., 1.6 -> 2
+     .clip(lower=0)    # jamás < 0 en un conteo
+     .astype('Int64')  # entero con NA permitido (nullable)
+)
+
+
+df['NUMERO_HIJOS'] = s_imp
+
+print(f"Mediana usada: {fill_val}")
+print(df['NUMERO_HIJOS'].value_counts(dropna=False).sort_index().head(12))
+
+print(SEPARADOR)
+
+print(f"\n=== IMPUTACION EN EDAD ===")
+df['EDAD2'] = pd.to_numeric(df['EDAD2'], errors='coerce')
+was_nae = df['EDAD2'].isna()
+
+
+fill_vale = float(np.nanmedian(df['EDAD2'])) #Con mediana
+
+
+e_imp = (
+    df['EDAD2'].fillna(fill_vale) #Relleno los NA
+     .round()          # p. ej., 1.6 -> 2
+     .clip(lower=0)    # jamás < 0 en un conteo
+     .astype('Int64')  # entero con NA permitido (nullable)
+)
+
+
+df['EDAD2'] = e_imp
+
+print(f"Mediana usada: {fill_vale}")
+print(df['EDAD2'].value_counts(dropna=False).sort_index().head(12))
+
+print(SEPARADOR)
+
+print(f"\n=== IMPUTACION EN HIJOS EN HOGAR ===")
+df['HIJOS_EN_HOGAR'] = pd.to_numeric(df['HIJOS_EN_HOGAR'], errors='coerce')
+was_nae = df['HIJOS_EN_HOGAR'].isna()
+
+
+fill_vale = float(np.nanmedian(df['HIJOS_EN_HOGAR'])) #Con mediana
+
+
+e_imp = (
+    df['HIJOS_EN_HOGAR'].fillna(fill_vale) #Relleno los NA
+     .round()          # p. ej., 1.6 -> 2
+     .clip(lower=0)    # jamás < 0 en un conteo
+     .astype('Int64')  # entero con NA permitido (nullable)
+)
+
+df['HIJOS_EN_HOGAR'] = e_imp
+
+print(f"Mediana usada: {fill_vale}")
+print(df['HIJOS_EN_HOGAR'].value_counts(dropna=False).sort_index().head(12))
+
+print(SEPARADOR)
+
+#Luego de tener el dataset depurado y limpio sin faltantes, extraemos variables a trabajar
 print("=== EXTRAEMOS UNICAMENTE LAS VARIABLES A TRABAJAR ===")
 deseadas = [
     "EDAD2","SEXO","NIVEL EDUCATIVO","ESTRATO","CATEGORIA","ESTADO_CIVIL",
@@ -122,115 +190,6 @@ print(df)
 print(SEPARADOR)
 
 
-print(f"\n=== IMPUTACION EN NUMERO DE HIJOS ===")
-was_na = df['NUMERO_HIJOS'].isna()
-
-
-fill_val = float(np.nanmedian(df['NUMERO_HIJOS'])) #Con mediana
-
-
-s_imp = (
-    df['NUMERO_HIJOS'].fillna(fill_val) #Relleno los NA
-     .round()          # p. ej., 1.6 -> 2
-     .clip(lower=0)    # jamás < 0 en un conteo
-     .astype('Int64')  # entero con NA permitido (nullable)
-)
-
-
-df['NUMERO_HIJOS'] = s_imp
-
-print(f"Mediana usada: {fill_val}")
-print(df['NUMERO_HIJOS'].value_counts(dropna=False).sort_index().head(12))
-
-print("=== ANÁLISIS DE DATOS FALTANTES ===")
-missing_data = df.isnull().sum()
-missing_percent = (missing_data / len(df)) * 100
-print("Top 10 columnas con más datos faltantes:")
-missing_info = pd.DataFrame({
-'Columna': missing_data.index,
-'Datos_Faltantes': missing_data.values,
-'Porcentaje': missing_percent.values
-}).sort_values('Datos_Faltantes', ascending=False)
-
-print("\nFaltantes en NUMERO_HIJOS:")
-print(missing_info[ missing_info['Columna'] == 'NUMERO_HIJOS' ])
-
-print(SEPARADOR)
-
-print(f"\n=== IMPUTACION EN EDAD ===")
-df['EDAD2'] = pd.to_numeric(df['EDAD2'], errors='coerce')
-was_nae = df['EDAD2'].isna()
-
-
-fill_vale = float(np.nanmedian(df['EDAD2'])) #Con mediana
-
-
-e_imp = (
-    df['EDAD2'].fillna(fill_vale) #Relleno los NA
-     .round()          # p. ej., 1.6 -> 2
-     .clip(lower=0)    # jamás < 0 en un conteo
-     .astype('Int64')  # entero con NA permitido (nullable)
-)
-
-
-df['EDAD2'] = e_imp
-
-
-print(f"Mediana usada: {fill_vale}")
-print(df['EDAD2'].value_counts(dropna=False).sort_index().head(12))
-
-print("=== ANÁLISIS DE DATOS FALTANTES ===")
-missing_data = df.isnull().sum()
-missing_percent = (missing_data / len(df)) * 100
-print("Top 10 columnas con más datos faltantes:")
-missing_info = pd.DataFrame({
-'Columna': missing_data.index,
-'Datos_Faltantes': missing_data.values,
-'Porcentaje': missing_percent.values
-}).sort_values('Datos_Faltantes', ascending=False)
-
-print("\nFaltantes en EDAD:")
-print(missing_info[ missing_info['Columna'] == 'EDAD2' ])
-
-print(SEPARADOR)
-
-print(f"\n=== IMPUTACION EN HIJOS EN HOGAR ===")
-df['HIJOS_EN_HOGAR'] = pd.to_numeric(df['HIJOS_EN_HOGAR'], errors='coerce')
-was_nae = df['HIJOS_EN_HOGAR'].isna()
-
-
-fill_vale = float(np.nanmedian(df['HIJOS_EN_HOGAR'])) #Con mediana
-
-
-e_imp = (
-    df['HIJOS_EN_HOGAR'].fillna(fill_vale) #Relleno los NA
-     .round()          # p. ej., 1.6 -> 2
-     .clip(lower=0)    # jamás < 0 en un conteo
-     .astype('Int64')  # entero con NA permitido (nullable)
-)
-
-
-df['HIJOS_EN_HOGAR'] = e_imp
-
-
-print(f"Mediana usada: {fill_vale}")
-print(df['HIJOS_EN_HOGAR'].value_counts(dropna=False).sort_index().head(12))
-
-print("=== ANÁLISIS DE DATOS FALTANTES ===")
-missing_data = df.isnull().sum()
-missing_percent = (missing_data / len(df)) * 100
-print("Top 10 columnas con más datos faltantes:")
-missing_info = pd.DataFrame({
-'Columna': missing_data.index,
-'Datos_Faltantes': missing_data.values,
-'Porcentaje': missing_percent.values
-}).sort_values('Datos_Faltantes', ascending=False)
-
-print("\nFaltantes en HIJOS_EN_HOGAR:")
-print(missing_info[ missing_info['Columna'] == 'HIJOS_EN_HOGAR' ])
-
-print(SEPARADOR)
-
 # Análisis de datos faltantes
 print("=== ANÁLISIS DE DATOS FALTANTES ===")
 missing_data = df.isnull().sum()
@@ -244,15 +203,4 @@ missing_info = pd.DataFrame({
 print(missing_info.head(18))
 
 print(SEPARADOR)
-
-print("=== VISTA DE VARIABLES LIMPIAS Y DEPURADAS ===")
-pio.renderers.default = "browser"
-vista = df.head(300)
-
-fig = go.Figure(data=[go.Table(
-    header=dict(values=list(vista.columns), align="left"),
-    cells=dict(values=[vista[c] for c in vista.columns], align="left")
-)])
-fig.update_layout(height=650)
-fig.show()
 
