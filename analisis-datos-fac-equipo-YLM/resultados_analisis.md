@@ -53,7 +53,7 @@ Partimos de **<6423>** registros y **<231>** variables; para el análisis usamos
 ---
 # 📊 Análisis Demográfico
 
-Como analista demográfica del equipo, se realizó un análisis de los datos provenientes de la encuesta de bienestar familiar aplicada al personal de la Fuerza Aérea Colombiana (FAC). El propósito fue caracterizar la población encuestada desde una perspectiva demográfica, explorando variables como edad, género, categoría militar, nivel educativo y estrato socioeconómico.
+Como analista demográfica del equipo, se realizó un análisis de los datos provenientes de la encuesta de bienestar familiar aplicada al personal de la Fuerza Aérea Colombiana (FAC). El propósito fue caracterizar la población encuestada desde una perspectiva demográfica, explorando variables como edad, sexo, categoría militar, nivel educativo y estrato socioeconómico.
 
 La base de datos fue depurada previamente por el experto en calidad de datos, quedando conformada por 6423 registros y 18 variables listas para su análisis.
 
@@ -73,7 +73,7 @@ Esto indica que gran parte del personal de la FAC encuestado se encuentra en eda
   
 Existe una clara predominancia masculina, coherente con el contexto militar.
 Sin embargo, la participación femenina es significativa, representando casi un tercio de la muestra, lo que refleja avances en inclusión y diversidad dentro de la institución.
-Sí existen diferencias en la distribución por género: los hombres son mayoría, pero las mujeres tienen una presencia importante.
+Sí existen diferencias en la distribución por sexo: los hombres son mayoría, pero las mujeres tienen una presencia importante.
 
 ## 🎖️ Categoría Militar
 
